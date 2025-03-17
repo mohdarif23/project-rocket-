@@ -1,0 +1,750 @@
+/* Base styles */
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background: linear-gradient(to bottom, 
+        #87CEEB 0%, /* Sky blue */
+        #FFB6C1 20%, /* Light pink */
+        #FFE4B5 40%, /* Light orange */
+        #87CEEB 60% /* Back to sky blue */
+    );
+    overflow: hidden;
+    position: relative;
+}
+
+/* Morning sun */
+body::before {
+    content: '';
+    position: fixed;
+    top: 50px;
+    left: 100px;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle at center, #FFD700, #FFA500);
+    border-radius: 50%;
+    box-shadow: 
+        0 0 100px #FFD700,
+        0 0 200px rgba(255, 215, 0, 0.4);
+    opacity: 1;
+    z-index: 1;
+    animation: sunGlow 4s infinite alternate;
+}
+
+@keyframes sunGlow {
+    0% { box-shadow: 0 0 100px #FFD700, 0 0 200px rgba(255, 215, 0, 0.4); }
+    100% { box-shadow: 0 0 150px #FFD700, 0 0 250px rgba(255, 215, 0, 0.6); }
+}
+
+body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: 
+        radial-gradient(1px 1px at 25px 45px, #ffffff, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 75px 85px, #ffffff, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 125px 155px, #ffffff, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 175px 95px, #ffffff, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 225px 165px, #ffffff, rgba(0,0,0,0));
+    background-size: 600px 600px;
+    background-repeat: repeat;
+    animation: twinkle 4s ease-in-out infinite alternate;
+    opacity: 0;
+    transition: opacity 3s ease-in-out;
+    pointer-events: none;
+    z-index: 1;
+}
+
+@keyframes twinkle {
+    0% { opacity: 0.3; }
+    50% { opacity: 0.8; }
+    100% { opacity: 0.3; }
+}
+
+.moon {
+    position: fixed;
+    top: 50px;
+    right: 100px;
+    width: 150px;
+    height: 150px;
+    background: radial-gradient(circle at 30% 30%, #ffd700, #ffa500);
+    border-radius: 50%;
+    box-shadow: 
+        0 0 60px #ffd700,
+        0 0 100px rgba(255, 215, 0, 0.4),
+        inset -25px -25px 50px rgba(0,0,0,0.3);
+    opacity: 0;
+    transition: opacity 3s ease-in-out;
+    z-index: 1;
+    animation: moonGlow 4s infinite alternate;
+}
+
+@keyframes moonGlow {
+    0% { box-shadow: 0 0 60px #ffd700, 0 0 100px rgba(255, 215, 0, 0.4); }
+    100% { box-shadow: 0 0 80px #ffd700, 0 0 120px rgba(255, 215, 0, 0.6); }
+}
+
+.moon::before {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    width: 30px;
+    height: 30px;
+    background: rgba(255,255,255,0.4);
+    border-radius: 50%;
+    filter: blur(5px);
+}
+
+.ground {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 150px;
+    background: linear-gradient(to bottom, #2d5a27, #1a4f14);
+    z-index: 3;
+    opacity: 0;
+    transition: opacity 2s ease-in-out, transform 2s ease-in-out;
+    transform-origin: bottom;
+    transform: translateY(100%);
+}
+
+.launching ~ .ground {
+    opacity: 0;
+    transform: translateY(100%);
+}
+
+.descending ~ .ground {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.grass {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 40px;
+    background: 
+        repeating-linear-gradient(
+            80deg,
+            #3a7333 0px,
+            #3a7333 3px,
+            transparent 3px,
+            transparent 6px
+        );
+    transition: opacity 2s ease-in-out;
+    opacity: 1;
+}
+
+.trees {
+    position: absolute;
+    bottom: 40px;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    z-index: 3;
+    transition: opacity 2s ease-in-out;
+    opacity: 1;
+}
+
+.tree {
+    position: absolute;
+    bottom: 0;
+    width: 40px;
+    height: 80px;
+    background: #2d5a27;
+    clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
+}
+
+.tree::before {
+    content: '';
+    position: absolute;
+    bottom: 60px;
+    left: -10px;
+    width: 60px;
+    height: 60px;
+    background: #3a7333;
+    border-radius: 50% 50% 0 0;
+}
+
+.tree:nth-child(1) { left: 10%; }
+.tree:nth-child(2) { left: 30%; transform: scale(0.8); }
+.tree:nth-child(3) { left: 50%; }
+.tree:nth-child(4) { left: 70%; transform: scale(1.2); }
+.tree:nth-child(5) { left: 90%; transform: scale(0.9); }
+
+/* Container for centering */
+.container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    position: relative;
+    padding-bottom: 150px;
+    box-sizing: border-box;
+}
+
+/* Animation container */
+.arun {
+    position: relative;
+    transform: translateY(0) scale(0.08);
+    transform-origin: center bottom;
+    transition: all 10s ease-in-out;
+    z-index: 2;
+}
+
+/* Launch animation */
+.arun.launching {
+    transform: translateY(-85vh) scale(0.15);
+}
+
+/* Focus effect during launch */
+.arun.launching .rocket-body {
+    filter: drop-shadow(0 0 20px rgba(128, 189, 255, 0.5));
+}
+
+/* Descent animation */
+.arun.descending {
+    transform: translateY(0) scale(0.08);
+    transition-duration: 15s;
+}
+
+.arun.descending ~ .moon,
+.arun.descending ~ body::before {
+    opacity: 0;
+}
+
+.rocket-body {
+    text-align: center;
+    background-color: #80bdff;
+    height: 140cm;
+    width: 7.5cm;
+    position: relative;
+}
+
+.rocket-body span {
+    display: block;
+    padding: 4px;
+    color: white;
+    height: 41px;
+    font-weight: bolder;
+    font-size: xx-large;
+    position: relative;
+    text-align: center;
+    justify-items: center;
+    top: 125.5cm;
+    transform: translateY(-50.5%);
+    writing-mode: sideways-lr;
+    left: 120px;
+}
+
+.arrowup {
+    position: relative;
+    top: 125.5cm;
+}
+
+.arrowup img {
+    width: auto;
+    height: auto;
+}
+
+/* Parachute styles */
+.parachute {
+    position: absolute;
+    top: -10cm;
+    left: -3.5cm;
+    opacity: 0;
+    transform: scale(0) translateY(-20cm);
+    transition: all 5s ease-out;
+    z-index: 10;
+    filter: drop-shadow(0 10px 15px rgba(0,0,0,0.3));
+}
+
+.parachute.deployed {
+    opacity: 1;
+    transform: scale(4.5) translateY(0);
+    animation: parachuteSwing 6s ease-in-out infinite;
+}
+
+.parachute.landing {
+    transform: scale(4.5) translateY(20cm);
+    transition-duration: 15s;
+}
+
+@keyframes parachuteSwing {
+    0%, 100% { transform: scale(4.5) translateY(0) rotate(0deg); }
+    25% { transform: scale(4.5) translateY(0) rotate(3deg); }
+    75% { transform: scale(4.5) translateY(0) rotate(-3deg); }
+}
+
+.parachute-small {
+    position: absolute;
+    top: -5cm;
+    opacity: 0;
+    transform: scale(0);
+    transition: all 4s ease-out;
+    z-index: 9;
+    filter: drop-shadow(0 10px 15px rgba(0,0,0,0.3));
+}
+
+.parachute-small.deployed {
+    opacity: 1;
+    transform: scale(2.5) translateY(0);
+    animation: parachuteSmallSwing 6s ease-in-out infinite;
+}
+
+.parachute-small.landing {
+    transform: scale(2.5) translateY(15cm);
+    transition-duration: 15s;
+}
+
+@keyframes parachuteSmallSwing {
+    0%, 100% { transform: scale(2.5) translateY(0) rotate(0deg); }
+    25% { transform: scale(2.5) translateY(0) rotate(-3deg); }
+    75% { transform: scale(2.5) translateY(0) rotate(3deg); }
+}
+
+.parachute-small.left {
+    left: -8cm;
+    animation-delay: 0.5s;
+}
+
+.parachute-small.right {
+    right: -8cm;
+    animation-delay: 1s;
+}
+
+.canopy {
+    width: 14cm;
+    height: 7cm;
+    background: linear-gradient(135deg, #ff0000 0%, #ff4444 50%, #ff0000 100%);
+    border-radius: 14cm 14cm 0 0;
+    position: relative;
+    box-shadow: 
+        inset 0 10px 20px rgba(0,0,0,0.4),
+        inset 0 -5px 15px rgba(255,255,255,0.5),
+        0 5px 15px rgba(0,0,0,0.4);
+    overflow: hidden;
+    animation: canopyWave 3s infinite ease-in-out;
+}
+
+.parachute-small .canopy {
+    background: linear-gradient(135deg, #4444ff 0%, #6666ff 50%, #4444ff 100%);
+    animation: canopyWave 3s infinite ease-in-out 0.5s;
+}
+
+@keyframes canopyWave {
+    0%, 100% { transform: skewX(0deg); }
+    25% { transform: skewX(2deg); }
+    75% { transform: skewX(-2deg); }
+}
+
+.canopy::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    background: repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 0.8cm,
+        rgba(255,255,255,0.3) 0.8cm,
+        rgba(255,255,255,0.3) 1.6cm
+    );
+}
+
+.strings {
+    position: relative;
+    height: 12cm;
+    display: flex;
+    justify-content: space-around;
+    padding: 0 1cm;
+}
+
+.parachute-small .strings {
+    height: 8cm;
+}
+
+.string {
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(to bottom, #ffffff, #cccccc);
+    position: relative;
+    transform-origin: top;
+    animation: stringWave 3s infinite ease-in-out;
+    box-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+}
+
+@keyframes stringWave {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(8deg); }
+}
+
+.launch-btn {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 15px 30px;
+    font-size: 18px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 1000;
+    transition: all 0.3s ease;
+}
+
+.launch-btn:hover {
+    background: #45a049;
+    transform: translateX(-50%) scale(1.05);
+}
+
+.launch-btn:disabled {
+    background: #cccccc;
+    cursor: not-allowed;
+    transform: translateX(-50%) scale(1);
+}
+
+.rocket-nose {
+    top: 0.2cm;
+    left: -0.03cm;
+    position: relative;
+    display: inline-block;
+    width: 0;
+    height: -2;
+    border-style: solid;
+    border-width: 0px 142.5px 1511.8110236px 142.5px;
+    border-color: transparent transparent #80bdff transparent;
+}
+
+.rocket-nosetip {
+    transform: scale(0.34, 0.72);
+    top: 20cm;
+    left: -3.7cm;
+    position: relative;
+    width: 0;
+    height: -2;
+    border-style: solid;
+    border-width: 0px 142.5px 1511.8110236px 142.5px;
+    border-color: transparent transparent #333f70 transparent;
+}
+
+.window {
+    background-color: #333f70;
+    position: relative;
+    height: 4cm;
+    left: 0cm;
+    width: 7.5cm;
+    top: -48cm;
+    display: flex;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.3);
+}
+
+.sec {
+    background-color: #333f70;
+    height: 0.7cm;
+    position: relative;
+    top: 5cm;
+    width: 7.5cm;
+}
+
+.jetfire {
+    position: relative;
+    top: 124.7cm;
+    height: 40cm;
+    width: 7.5cm;
+    overflow: visible;
+    background: rgba(128, 189, 255, 0.3);
+    z-index: 1;
+}
+
+.fire {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 30cm;
+    opacity: 1;
+    transition: opacity 0.3s;
+    z-index: 2;
+}
+
+.launching .fire {
+    opacity: 1;
+}
+
+.descending .fire {
+    opacity: 0;
+}
+
+.fire-line {
+    position: absolute;
+    bottom: 0;
+    width: 33.33%;
+    height: 30cm;
+    background: linear-gradient(to bottom, 
+        transparent 0%,
+        #ff5500 10%,
+        #ff7700 20%,
+        #ff9900 40%,
+        #ffaa00 60%,
+        #ffcc00 80%,
+        #ffdd00 100%
+    );
+    filter: brightness(1.5) contrast(1.2);
+    box-shadow: 0 0 30px rgba(255, 85, 0, 0.8);
+    animation: fireAnimation 0.5s infinite;
+}
+
+.fire-line:nth-child(1) {
+    left: 0;
+    animation-delay: 0s;
+    transform: skewX(15deg);
+    height: 28cm;
+}
+
+.fire-line:nth-child(2) {
+    left: 33.33%;
+    animation-delay: 0.1s;
+    height: 30cm;
+}
+
+.fire-line:nth-child(3) {
+    right: 0;
+    animation-delay: 0.2s;
+    transform: skewX(-15deg);
+    height: 28cm;
+}
+
+.fire-line::before {
+    content: '';
+    position: absolute;
+    bottom: -10%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200%;
+    height: 100%;
+    background: radial-gradient(
+        circle at center,
+        #ffff00,
+        #ff6b00 30%,
+        transparent 70%
+    );
+    filter: blur(30px);
+}
+
+@keyframes fireAnimation {
+    0%, 100% {
+        clip-path: polygon(
+            0% 100%,
+            20% 90%,
+            40% 95%,
+            60% 85%,
+            80% 95%,
+            100% 90%,
+            100% 100%
+        );
+    }
+    50% {
+        clip-path: polygon(
+            0% 100%,
+            20% 85%,
+            40% 90%,
+            60% 95%,
+            80% 85%,
+            100% 95%,
+            100% 100%
+        );
+    }
+}
+
+/* Enhanced smoke effects */
+.smoke {
+    display: none;
+    position: absolute;
+    bottom: 0;
+    left: -100%;
+    width: 300%;
+    height: 400%;
+    background: 
+        radial-gradient(circle at center, rgba(255,255,255,0.8), transparent 50%) 50% 70% / 100% 100%,
+        radial-gradient(circle at center, rgba(255,255,255,0.6), transparent 40%) 30% 80% / 80% 80%,
+        radial-gradient(circle at center, rgba(255,255,255,0.6), transparent 40%) 70% 90% / 80% 80%,
+        radial-gradient(circle at center, rgba(255,255,255,0.5), transparent 30%) 20% 85% / 60% 60%,
+        radial-gradient(circle at center, rgba(255,255,255,0.5), transparent 30%) 80% 85% / 60% 60%;
+    opacity: 0;
+    animation: smokeAnimation 4s infinite;
+    filter: blur(4px);
+    transform-origin: center bottom;
+}
+
+.launching .smoke {
+    display: none;
+    opacity: 0;
+}
+
+@keyframes smokeAnimation {
+    0% { 
+        transform: translateY(0) scale(1); 
+        opacity: 0.9;
+    }
+    50% {
+        transform: translateY(-50%) scale(1.5);
+        opacity: 0.7;
+    }
+    100% { 
+        transform: translateY(-100%) scale(2.5); 
+        opacity: 0.3;
+    }
+}
+
+/* Additional smoke particles */
+.smoke::before,
+.smoke::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at center, rgba(255,255,255,0.3), transparent 40%) 40% 75% / 70% 70%,
+        radial-gradient(circle at center, rgba(255,255,255,0.2), transparent 30%) 60% 85% / 60% 60%;
+    animation: smokeParticles 3s infinite alternate;
+}
+
+.smoke::before {
+    left: -30%;
+    animation-delay: 0.5s;
+}
+
+.smoke::after {
+    right: -30%;
+    animation-delay: 1s;
+}
+
+@keyframes smokeParticles {
+    0% { 
+        transform: translateY(0) scale(1) rotate(0deg); 
+        opacity: 0.6;
+    }
+    100% { 
+        transform: translateY(-30%) scale(1.3) rotate(5deg); 
+        opacity: 0.2;
+    }
+}
+
+.smoke-particle {
+    display: none;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, rgba(255,255,255,0.3), transparent 40%);
+    animation: particleFloat 3s infinite;
+    opacity: 0;
+}
+
+.smoke-particle:nth-child(1) {
+    left: -30%;
+    animation-delay: 0s;
+    transform-origin: 70% bottom;
+}
+
+.smoke-particle:nth-child(2) {
+    left: 0;
+    animation-delay: 0.5s;
+    transform-origin: center bottom;
+}
+
+.smoke-particle:nth-child(3) {
+    right: -30%;
+    animation-delay: 1s;
+    transform-origin: 30% bottom;
+}
+
+@keyframes particleFloat {
+    0% {
+        transform: translateY(0) scale(1) rotate(0deg);
+        opacity: 0.8;
+    }
+    50% {
+        transform: translateY(-100%) scale(2) rotate(5deg);
+        opacity: 0.4;
+    }
+    100% {
+        transform: translateY(-200%) scale(3) rotate(-5deg);
+        opacity: 0;
+    }
+}
+
+.jet-logo {
+    z-index: 1;
+    position: relative;
+    top: 31cm;
+    transform: scale(3.0);
+    left: 0.9cm;
+    --s: 50px;
+    width: 220px;
+    aspect-ratio: 5 / 3;
+    clip-path: polygon(0 100%, 0 calc(100% - var(--s)), 50% 0, 100% calc(100% - var(--s)), 100% 100%, 50% var(--s));
+    background: linear-gradient(45deg, #333f70, #4a5a9e);
+}
+
+.fin-left {
+    left: -5cm;
+    top: 153.7cm;
+    transform: rotate(0deg);
+    position: relative;
+    background: linear-gradient(to right, #6ba6e5, #80bdff);
+    height: 16cm;
+    width: 5cm;
+    clip-path: polygon(
+        0 5cm,
+        100% 1.3cm,
+        100% calc(100% - 2cm),
+        0 calc(150% - 8cm)
+    );
+}
+
+.fin-right {
+    left: 7.5cm;
+    top: 137.7cm;
+    transform: rotate(0deg);
+    position: relative;
+    background: linear-gradient(to left, #6ba6e5, #80bdff);
+    height: 16cm;
+    width: 5cm;
+    clip-path: polygon(
+        100% 5cm,
+        0 1cm,
+        0 calc(100% - 2cm),
+        100% calc(150% - 8cm)
+    );
+}
+
+/* Space visibility */
+body.space-visible::before,
+body.space-visible::after {
+    opacity: 1;
+}
+
+body.space-visible .moon {
+    opacity: 1;
+}
+
+/* Update existing moon and stars transitions */
+body::before,
+body::after,
+.moon {
+    transition: opacity 3s ease-in-out;
+}
